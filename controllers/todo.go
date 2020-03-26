@@ -17,6 +17,14 @@ func HiTodo(c echo.Context) error {
 	})
 }
 
+// GetTodo returns a todo by id
+func GetTodo(c echo.Context) error {
+	id := c.Param("id")
+	return c.JSON(http.StatusOK, map[string]string{
+		"message1": id,
+	})
+}
+
 // NewTodo creates new todo
 func NewTodo(c echo.Context) error {
 	u := models.Todo{}
@@ -27,4 +35,20 @@ func NewTodo(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, &u)
+}
+
+// UpdateTodo updates a todo
+func UpdateTodo(c echo.Context) error {
+	id := c.Param("id")
+	return c.JSON(http.StatusOK, map[string]string{
+		"message2": id,
+	})
+}
+
+// RemoveTodo deletes a todo
+func RemoveTodo(c echo.Context) error {
+	id := c.Param("id")
+	return c.JSON(http.StatusOK, map[string]string{
+		"message3": id,
+	})
 }

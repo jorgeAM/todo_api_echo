@@ -6,6 +6,10 @@ import (
 )
 
 func initTodoRoutes(e *echo.Echo) {
-	e.GET("/", controllers.HiTodo)
-	e.POST("/", controllers.NewTodo)
+	g := e.Group("todos")
+	g.GET("", controllers.HiTodo)
+	g.POST("", controllers.NewTodo)
+	g.GET("/:id", controllers.GetTodo)
+	g.PUT("/:id", controllers.UpdateTodo)
+	g.DELETE("/:id", controllers.RemoveTodo)
 }
