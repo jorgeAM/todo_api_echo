@@ -7,4 +7,5 @@ import (
 
 func initTodoRoutes(e *echo.Echo) {
 	e.GET("/", controllers.HiTodo)
+	e.POST("/", controllers.NewTodo)
 }

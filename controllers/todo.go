@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/jorgeAM/echo-api/db"
+	"github.com/jorgeAM/echo-api/models"
 	"github.com/labstack/echo/v4"
 )
 
@@ -14,4 +15,16 @@ func HiTodo(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]string{
 		"message": "Hi!!",
 	})
+}
+
+// NewTodo creates new todo
+func NewTodo(c echo.Context) error {
+	u := models.Todo{}
+	err := c.Bind(&u)
+
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusCreated, &u)
 }
