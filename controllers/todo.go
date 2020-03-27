@@ -17,10 +17,18 @@ func HiTodo(c echo.Context) error {
 
 // GetTodo returns a todo by id
 func GetTodo(c echo.Context) error {
+	db := connection.Conn()
+	defer db.Close()
+	u := models.Todo{}
 	id := c.Param("id")
-	return c.JSON(http.StatusOK, map[string]string{
-		"message1": id,
-	})
+	db.First(&u, id)
+
+	if u.ID <= 0 {
+		msg := "user with id " + id + " does not exist"
+		return echo.NewHTTPError(http.StatusNotFound, msg)
+	}
+
+	return c.JSON(http.StatusOK, &u)
 }
 
 // NewTodo creates new todo
