@@ -3,15 +3,15 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/jorgeAM/echo-api/db"
+	connection "github.com/jorgeAM/echo-api/db/conn"
 	"github.com/jorgeAM/echo-api/models"
 	"github.com/labstack/echo/v4"
 )
 
 // HiTodo says hi to you
 func HiTodo(c echo.Context) error {
-	db := db.Conn()
-	db.Close()
+	db := connection.Conn()
+	defer db.Close()
 	return c.JSON(http.StatusOK, map[string]string{
 		"message": "Hi!!",
 	})
