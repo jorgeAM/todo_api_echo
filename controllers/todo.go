@@ -53,10 +53,25 @@ func NewTodo(c echo.Context) error {
 
 // UpdateTodo updates a todo
 func UpdateTodo(c echo.Context) error {
+	db := connection.Conn()
+	defer db.Close()
+	u := models.Todo{}
 	id := c.Param("id")
-	return c.JSON(http.StatusOK, map[string]string{
-		"message2": id,
-	})
+	db.First(&u, id)
+
+	if u.ID <= 0 {
+		msg := "user with id " + id + " does not exist"
+		return echo.NewHTTPError(http.StatusNotFound, msg)
+	}
+
+	err := c.Bind(&u)
+
+	if err != nil {
+		return err
+	}
+
+	db.Save(&u)
+	return c.JSON(http.StatusOK, &u)
 }
 
 // RemoveTodo deletes a todo
