@@ -61,8 +61,24 @@ func UpdateTodo(c echo.Context) error {
 
 // RemoveTodo deletes a todo
 func RemoveTodo(c echo.Context) error {
+	db := connection.Conn()
+	defer db.Close()
+	u := models.Todo{}
 	id := c.Param("id")
-	return c.JSON(http.StatusOK, map[string]string{
-		"message3": id,
+	db.First(&u, id)
+
+	if u.ID <= 0 {
+		msg := "user with id " + id + " does not exist"
+		return echo.NewHTTPError(http.StatusNotFound, msg)
+	}
+
+	err := db.Delete(&u).Error
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, map[string]bool{
+		"success": true,
 	})
 }
