@@ -10,8 +10,6 @@ import (
 
 // HiTodo says hi to you
 func HiTodo(c echo.Context) error {
-	db := connection.Conn()
-	defer db.Close()
 	return c.JSON(http.StatusOK, map[string]string{
 		"message": "Hi!!",
 	})
@@ -27,8 +25,16 @@ func GetTodo(c echo.Context) error {
 
 // NewTodo creates new todo
 func NewTodo(c echo.Context) error {
+	db := connection.Conn()
+	defer db.Close()
 	u := models.Todo{}
 	err := c.Bind(&u)
+
+	if err != nil {
+		return err
+	}
+
+	err = db.Create(&u).Error
 
 	if err != nil {
 		return err
