@@ -7,6 +7,6 @@ import (
 
 func initAuthRoutes(e *echo.Echo) {
 	g := e.Group("auth")
-	g.POST("/sign-in", controllers.SignIn)
+	g.POST("/sign-up", controllers.SignUp)
 	g.POST("/login", controllers.Login)
 }
