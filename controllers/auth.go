@@ -42,7 +42,13 @@ func SignUp(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "we can't create your account")
 	}
 
-	return c.JSON(http.StatusCreated, &u)
+	t, err := utils.GenerateJWT(u)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "jwt can't be generated")
+	}
+
+	return c.JSON(http.StatusOK, &t)
 }
 
 // Login returns a jwt
@@ -67,5 +73,11 @@ func Login(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "incorrect password")
 	}
 
-	return c.JSON(http.StatusOK, &u)
+	t, err := utils.GenerateJWT(u)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "jwt can't be generated")
+	}
+
+	return c.JSON(http.StatusOK, &t)
 }
