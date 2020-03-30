@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/dgrijalva/jwt-go"
 	connection "github.com/jorgeAM/echo-api/db/conn"
 	"github.com/jorgeAM/echo-api/models"
 	"github.com/labstack/echo/v4"
@@ -12,8 +13,13 @@ import (
 func GetTodos(c echo.Context) error {
 	db := connection.Conn()
 	defer db.Close()
+
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*models.Claim)
+	userID := claims.ID
+
 	todos := []models.Todo{}
-	db.Find(&todos)
+	db.Where("userId = ?", userID).Find(&todos)
 	return c.JSON(http.StatusOK, &todos)
 }
 
