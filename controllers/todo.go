@@ -50,6 +50,10 @@ func NewTodo(c echo.Context) error {
 		return err
 	}
 
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*models.Claim)
+	t.UserID = &claims.ID
+
 	err = db.Create(&t).Error
 
 	if err != nil {
